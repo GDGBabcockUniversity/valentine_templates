@@ -6,8 +6,8 @@
   --color-background-dark: #000000;
   --color-surface-dark: #121212;
   --color-surface-highlight: #1e1e1e;
-  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui;
-  --font-body: var(--font-noto-sans), ui-sans-serif, system-ui;
+  --font-family-display: var(--font-space-grotesk), ui-sans-serif, system-ui;
+  --font-family-body: var(--font-noto-sans), ui-sans-serif, system-ui;
   --background-image-dot-pattern: radial-gradient(#e00b5c 1px, transparent 1px);
 }
 @utility text-glow {
@@ -31,5 +31,5 @@
 body {
   background-color: var(--color-background-dark);
   color: white;
-  font-family: var(--font-display); 
+  font-family: var(--font-space-grotesk), ui-sans-serif, system-ui;
 }
