@@ -12,17 +12,9 @@ export default function Footer() {
           <span className="text-base md:text-lg font-bold">Valentine Surprise</span>
         </div>
 
-        <div className="flex gap-4 md:gap-6">
-          <Link href="#" className="size-9 md:size-10 rounded-full bg-surface-dark border border-white/5 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-colors duration-300">
-            <Globe size={18} className="md:w-5 md:h-5" />
-          </Link>
-          <Link href="#" className="size-9 md:size-10 rounded-full bg-surface-dark border border-white/5 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-colors duration-300">
-            <Mail size={18} className="md:w-5 md:h-5" />
-          </Link>
-        </div>
 
         <p className="text-gray-500 text-xs md:text-sm font-normal text-center" style={{ fontFamily: 'var(--font-noto-sans), ui-sans-serif, system-ui' }}>
-          © 2024 Valentine Surprise. Made by GDG Babcock.
+          © 2026 Valentine Surprise. Made by GDG Babcock.
         </p>
       </div>
     </footer>
