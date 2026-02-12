@@ -40,10 +40,6 @@ export default function TemplateGallery() {
           <h2 className="text-white text-2xl md:text-4xl font-bold leading-tight mb-2">Template Gallery</h2>
           <p className="text-gray-400 text-sm md:text-base" style={{ fontFamily: 'var(--font-noto-sans), ui-sans-serif, system-ui' }}>Pick a style that matches your vibe.</p>
         </div>
-        <Link href="#templates" className="text-primary text-sm md:text-base font-bold hover:text-white transition-colors flex items-center gap-1 group">
-          View all templates
-          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-        </Link>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
