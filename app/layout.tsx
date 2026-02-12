@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Noto_Sans } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
         <div className="relative flex min-h-screen w-full flex-col group/design-root">
           {children}
         </div>
+        <Analytics />
       </body>
     </html>
   );

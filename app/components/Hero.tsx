@@ -1,4 +1,5 @@
-import { Heart, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { Heart } from 'lucide-react';
 
 export default function Hero() {
   return (
@@ -27,13 +28,13 @@ export default function Hero() {
           </p>
         </div>
 
-        <div className="relative z-10 flex flex-col sm:flex-row gap-3 md:gap-4 mt-2 md:mt-4 w-full justify-center">
-          <button className="flex items-center justify-center gap-2 h-11 md:h-12 lg:h-14 px-6 md:px-8 rounded-full bg-primary hover:bg-primary/90 text-white text-sm md:text-base font-bold transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40">
+        <div className="relative z-10 flex flex-col sm:flex-row gap-3 md:gap-4 mt-2 md:mt-4 w-full justify-center text-center">
+          <Link href="#templates" className="flex items-center justify-center gap-2 h-11 md:h-12 lg:h-14 px-6 md:px-8 rounded-full bg-primary hover:bg-primary/90 text-white text-sm md:text-base font-bold transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40">
             <span>Get Started</span>
-          </button>
-          <button className="flex items-center justify-center gap-2 h-11 md:h-12 lg:h-14 px-6 md:px-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm md:text-base font-medium transition-all backdrop-blur-sm">
+          </Link>
+          <Link href="#templates" className="flex items-center justify-center gap-2 h-11 md:h-12 lg:h-14 px-6 md:px-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm md:text-base font-medium transition-all backdrop-blur-sm">
             <span>View Gallery</span>
-          </button>
+          </Link>
         </div>
       </div>
     </div>

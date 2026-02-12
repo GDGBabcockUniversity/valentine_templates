@@ -34,13 +34,13 @@ const templates = [
 
 export default function TemplateGallery() {
   return (
-    <div className="w-full max-w-[1200px] px-4 py-12 md:py-16">
+    <div id="templates" className="w-full max-w-[1200px] px-4 py-12 md:py-16 scroll-mt-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-6 mb-8 md:mb-10 border-b border-white/10 pb-5 md:pb-6">
         <div>
           <h2 className="text-white text-2xl md:text-4xl font-bold leading-tight mb-2">Template Gallery</h2>
           <p className="text-gray-400 text-sm md:text-base" style={{ fontFamily: 'var(--font-noto-sans), ui-sans-serif, system-ui' }}>Pick a style that matches your vibe.</p>
         </div>
-        <Link href="#" className="text-primary text-sm md:text-base font-bold hover:text-white transition-colors flex items-center gap-1 group">
+        <Link href="#templates" className="text-primary text-sm md:text-base font-bold hover:text-white transition-colors flex items-center gap-1 group">
           View all templates
           <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
         </Link>
