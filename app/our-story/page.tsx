@@ -1,14 +1,13 @@
-"use client";
+"use client"
 
-import React, { useState, useEffect } from "react";
-import { Heart, ChevronRight, ChevronLeft, Image as ImageIcon } from "lucide-react";
-import Link from "next/link";
+import React, { useState, Suspense } from "react";
+import { Heart, ChevronRight, ChevronLeft } from "lucide-react";
 import Navbar from "../components/Navbar";
 import TemplateSidebar from "../components/TemplateSidebar";
 import { useTemplateEditor } from "../hooks/useTemplateEditor";
 import { OUR_STORY_CONFIG } from "../lib/templates";
 
-export default function OurStoryTemplate() {
+function OurStoryContent() {
   const { 
     data, 
     updateField, 
@@ -188,5 +187,13 @@ export default function OurStoryTemplate() {
 
       </div>
     </div>
+  );
+}
+
+export default function OurStoryTemplate() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading...</div>}>
+      <OurStoryContent />
+    </Suspense>
   );
 }

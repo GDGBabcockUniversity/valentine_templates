@@ -1,13 +1,13 @@
-"use client";
 
-import React, { useState, useEffect } from "react";
+"use client"
+import React, { useState, useEffect, Suspense } from "react";
 import { Heart } from "lucide-react";
 import Navbar from "../components/Navbar";
 import TemplateSidebar from "../components/TemplateSidebar";
 import { useTemplateEditor } from "../hooks/useTemplateEditor";
 import { LOVE_LETTER_CONFIG } from "../lib/templates";
 
-export default function LoveLetterTemplate() {
+function LoveLetterContent() {
   const { 
     data, 
     updateField, 
@@ -144,5 +144,13 @@ export default function LoveLetterTemplate() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function LoveLetterTemplate() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading...</div>}>
+      <LoveLetterContent />
+    </Suspense>
   );
 }

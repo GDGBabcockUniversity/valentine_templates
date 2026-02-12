@@ -1,14 +1,13 @@
-"use client";
+"use client"
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Heart } from "lucide-react";
-import Link from "next/link";
 import Navbar from "../components/Navbar";
 import TemplateSidebar from "../components/TemplateSidebar";
 import { useTemplateEditor } from "../hooks/useTemplateEditor";
 import { PROPOSAL_CONFIG } from "../lib/templates";
 
-export default function ProposalTemplate() {
+function ProposalContent() {
   const { 
     data, 
     updateField, 
@@ -175,5 +174,13 @@ export default function ProposalTemplate() {
         `}</style>
       </div>
     </div>
+  );
+}
+
+export default function ProposalTemplate() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading...</div>}>
+      <ProposalContent />
+    </Suspense>
   );
 }

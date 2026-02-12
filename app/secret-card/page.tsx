@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Heart } from "lucide-react";
 import Navbar from "../components/Navbar";
 import TemplateSidebar from "../components/TemplateSidebar";
 import { useTemplateEditor } from "../hooks/useTemplateEditor";
 import { SECRET_CARD_CONFIG } from "../lib/templates";
 
-export default function SecretCardTemplate() {
+function SecretCardContent() {
   const { 
     data, 
     updateField, 
@@ -252,5 +252,13 @@ export default function SecretCardTemplate() {
         }
       `}</style>
     </div>
+  );
+}
+
+export default function SecretCardTemplate() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading...</div>}>
+      <SecretCardContent />
+    </Suspense>
   );
 }
