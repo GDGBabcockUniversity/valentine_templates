@@ -13,12 +13,11 @@ export default function Navbar() {
 
       <div className="hidden md:flex flex-1 justify-end gap-8 items-center">
         <nav className="flex items-center gap-8">
-          <Link className="text-gray-300 hover:text-white transition-colors text-sm font-medium leading-normal" href="#">Templates</Link>
-
+          <Link className="text-gray-300 hover:text-white transition-colors text-sm font-medium leading-normal" href="/">Templates</Link>
         </nav>
-        <button className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary hover:bg-primary/90 transition-all text-white text-sm font-bold leading-normal tracking-[0.015em]">
+        <Link href="/proposal" className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary hover:bg-primary/90 transition-all text-white text-sm font-bold leading-normal tracking-[0.015em]">
           <span className="truncate">Get Started</span>
-        </button>
+        </Link>
       </div>
     </header>
   );

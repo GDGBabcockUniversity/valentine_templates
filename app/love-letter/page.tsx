@@ -3,13 +3,25 @@
 import React, { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import Navbar from "../components/Navbar";
+import TemplateSidebar from "../components/TemplateSidebar";
+import { useTemplateEditor } from "../hooks/useTemplateEditor";
+import { LOVE_LETTER_CONFIG } from "../lib/templates";
 
-export default function ValentineTemplate2() {
+export default function LoveLetterTemplate() {
+  const { 
+    data, 
+    updateField, 
+    isViewMode, 
+    isSidebarOpen, 
+    setIsSidebarOpen, 
+    publish 
+  } = useTemplateEditor(LOVE_LETTER_CONFIG);
+
   const [isOpen, setIsOpen] = useState(false);
   const [hearts, setHearts] = useState<{ id: number; left: string; delay: string; size: number }[]>([]);
 
   useEffect(() => {
-    // Generate random floating hearts on client side only to avoid hydration mismatch
+    
     const newHearts = Array.from({ length: 20 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
@@ -26,7 +38,29 @@ export default function ValentineTemplate2() {
 
   return (
     <div className="min-h-screen bg-background-dark flex flex-col font-body text-white relative overflow-hidden">
-      <Navbar />
+      {!isViewMode && <Navbar />}
+
+       {/* Sidebar for editing */}
+       {!isViewMode && (
+        <TemplateSidebar 
+          isOpen={isSidebarOpen} 
+          onClose={() => setIsSidebarOpen(false)}
+          config={LOVE_LETTER_CONFIG}
+          data={data}
+          onUpdate={updateField}
+          onPublish={publish}
+        />
+      )}
+
+      {/* Floating Edit Button */}
+      {!isViewMode && !isSidebarOpen && (
+        <button 
+          onClick={() => setIsSidebarOpen(true)}
+          className="fixed bottom-6 right-6 z-50 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary/90 transition-all hover:scale-105"
+        >
+          <Heart fill="currentColor" />
+        </button>
+      )}
 
       {/* Floating Hearts Background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -45,7 +79,9 @@ export default function ValentineTemplate2() {
         ))}
       </div>
 
-      <div className="flex-grow flex items-center justify-center p-4 z-10">
+      <div 
+        className={`flex-grow flex items-center justify-center p-4 z-10 transition-all duration-300 ${!isViewMode && isSidebarOpen ? 'md:ml-[400px]' : ''}`}
+      >
         <div className="relative w-[320px] h-[220px] sm:w-[500px] sm:h-[300px] cursor-pointer group" onClick={toggleEnvelope}>
           
           {/* Envelope Wrapper */}
@@ -60,11 +96,11 @@ export default function ValentineTemplate2() {
                 ${isOpen ? 'bottom-[140px] sm:bottom-[180px] opacity-100 rotate-0' : 'bottom-0 opacity-0 rotate-180 scale-90'}`}
             >
               <Heart className="text-primary w-6 h-6 sm:w-8 sm:h-8 mb-3 animate-pulse" fill="currentColor" />
-              <h2 className="text-primary font-display font-bold text-lg sm:text-2xl mb-2 sm:mb-3">Happy Valentine's!</h2>
-              <p className="text-gray-600 text-xs sm:text-base font-body leading-relaxed max-w-[240px] sm:max-w-xs mx-auto">
-                You make every day brighter. <br/> Will you be my Valentine? 
+              <h2 className="text-primary font-display font-bold text-lg sm:text-2xl mb-2 sm:mb-3">{data.title}</h2>
+              <p className="text-gray-600 text-xs sm:text-base font-body leading-relaxed max-w-[240px] sm:max-w-xs mx-auto whitespace-pre-wrap">
+                {data.body}
               </p>
-              <p className="text-primary font-bold mt-3 sm:mt-4 text-xs sm:text-sm tracking-widest uppercase">xoxo</p>
+              <p className="text-primary font-bold mt-3 sm:mt-4 text-xs sm:text-sm tracking-widest uppercase">{data.signature}</p>
             </div>
 
             {/* Front Flap (Left) */}

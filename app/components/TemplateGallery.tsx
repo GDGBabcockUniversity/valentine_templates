@@ -3,27 +3,31 @@ import { ArrowRight, Heart } from 'lucide-react';
 
 const templates = [
   {
-    title: "Minimalist Love",
-    subtitle: "Clean & Simple",
-    image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=2070&auto=format&fit=crop",
+    title: "The Proposal",
+    subtitle: "Neon & Vibrant",
+    image: "/proposal.png",
+    href: "/proposal",
     isNew: false
   },
   {
-    title: "Photo Memories",
-    subtitle: "Personal Touch",
-    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1974&auto=format&fit=crop",
+    title: "Love Letter",
+    subtitle: "Classic Envelope",
+    image: "/love-letter.png",
+    href: "/love-letter",
     isNew: false
   },
   {
-    title: "Neon Nights",
-    subtitle: "Vibrant & Bold",
-    image: "https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop",
-    isNew: true
+    title: "Secret Card",
+    subtitle: "Sealed with a Heart",
+    image: "/secret-letter.png",
+    href: "/secret-card",
+    isNew: false
   },
   {
-    title: "Classic Romance",
-    subtitle: "Timeless Style",
-    image: "https://images.unsplash.com/photo-1549417229-aa67d3263c09?q=80&w=1887&auto=format&fit=crop",
+    title: "Our Story",
+    subtitle: "Timeline Journey",
+    image: "/our-story.png",
+    href: "/our-story",
     isNew: false
   },
 ];
@@ -44,7 +48,7 @@ export default function TemplateGallery() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
         {templates.map((template, index) => (
-          <div key={index} className="group flex flex-col gap-3 pb-3 cursor-pointer">
+          <Link key={index} href={template.href} className="group flex flex-col gap-3 pb-3 cursor-pointer">
             <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl border border-white/10 bg-surface-dark card-hover transition-all duration-300">
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
@@ -59,19 +63,18 @@ export default function TemplateGallery() {
               )}
 
               <div className="absolute bottom-4 left-4 right-4 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                <button className="w-full h-10 bg-white text-black rounded-full font-bold text-sm hover:bg-gray-200">
+                <div className="w-full h-10 bg-white text-black rounded-full font-bold text-sm flex items-center justify-center hover:bg-gray-200">
                   Use Template
-                </button>
+                </div>
               </div>
             </div>
             <div>
               <div className="flex justify-between items-center">
                 <p className="text-white text-base md:text-lg font-bold leading-normal group-hover:text-primary transition-colors">{template.title}</p>
-                <Heart size={18} className="text-white/50 group-hover:text-primary transition-colors md:w-5 md:h-5" />
               </div>
               <p className="text-gray-500 text-xs md:text-sm font-normal leading-normal" style={{ fontFamily: 'var(--font-noto-sans), ui-sans-serif, system-ui' }}>{template.subtitle}</p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

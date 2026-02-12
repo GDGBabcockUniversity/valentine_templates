@@ -4,8 +4,20 @@ import React, { useState, useEffect } from "react";
 import { Heart } from "lucide-react";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
+import TemplateSidebar from "../components/TemplateSidebar";
+import { useTemplateEditor } from "../hooks/useTemplateEditor";
+import { PROPOSAL_CONFIG } from "../lib/templates";
 
-export default function ValentineTemplate1() {
+export default function ProposalTemplate() {
+  const { 
+    data, 
+    updateField, 
+    isViewMode, 
+    isSidebarOpen, 
+    setIsSidebarOpen, 
+    publish 
+  } = useTemplateEditor(PROPOSAL_CONFIG);
+
   const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
   const [isNoButtonMoved, setIsNoButtonMoved] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -35,9 +47,34 @@ export default function ValentineTemplate1() {
 
   return (
     <div className="min-h-screen bg-background-dark flex flex-col font-body text-white">
-      <Navbar />
+      {/* Only show Navbar if NOT in view mode (meaning we are editing or browsing) */}
+      {!isViewMode && <Navbar />}
+
+      {/* Sidebar for editing (Only if not in view mode) */}
+      {!isViewMode && (
+        <TemplateSidebar 
+          isOpen={isSidebarOpen} 
+          onClose={() => setIsSidebarOpen(false)}
+          config={PROPOSAL_CONFIG}
+          data={data}
+          onUpdate={updateField}
+          onPublish={publish}
+        />
+      )}
       
-      <div className="flex-grow flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Floating Edit Button (Only if sidebar is closed and not in view mode) */}
+      {!isViewMode && !isSidebarOpen && (
+        <button 
+          onClick={() => setIsSidebarOpen(true)}
+          className="fixed bottom-6 right-6 z-50 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary/90 transition-all hover:scale-105"
+        >
+          <Heart fill="currentColor" />
+        </button>
+      )}
+      
+      <div 
+        className={`flex-grow flex items-center justify-center p-4 relative overflow-hidden transition-all duration-300 ${!isViewMode && isSidebarOpen ? 'md:ml-[400px]' : ''}`}
+      >
         {/* Floating Hearts Background */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {hearts.map((heart) => (
@@ -65,11 +102,11 @@ export default function ValentineTemplate1() {
               </div>
 
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight font-display text-glow">
-                Will you be my Valentine?
+                {data.question}
               </h1>
               
               <p className="text-gray-400 mb-8 text-lg font-body">
-                Please say yes... 🥺👉👈
+                {data.subtext}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -77,7 +114,7 @@ export default function ValentineTemplate1() {
                   onClick={handleYesClick}
                   className="w-full sm:w-auto px-8 py-3 bg-primary text-white font-bold rounded-full shadow-lg hover:bg-primary/90 hover:scale-105 transition-all duration-300 active:scale-95 font-display shadow-primary/20"
                 >
-                  YESSSS! ✨
+                  {data.yesBtn}
                 </button>
 
                 <button
@@ -88,7 +125,7 @@ export default function ValentineTemplate1() {
                   }}
                   className="w-full sm:w-auto px-8 py-3 bg-transparent text-gray-300 border border-white/20 font-medium rounded-full shadow-sm hover:text-white hover:border-white/40 transition-all duration-300 font-display"
                 >
-                  No thanks
+                  {data.noBtn}
                 </button>
               </div>
 
@@ -106,10 +143,10 @@ export default function ValentineTemplate1() {
                 </div>
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight font-display">
-                Yay! I knew you'd say yes! ❤️
+                {data.successTitle}
               </h1>
               <p className="text-gray-400 mb-8 text-lg font-body">
-                I love you so much! See you on the 14th! 😘
+                {data.successBody}
               </p>
             </div>
           )}

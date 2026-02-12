@@ -1,28 +1,68 @@
 "use client";
 
 import React, { useState } from "react";
+import { Heart } from "lucide-react";
 import Navbar from "../components/Navbar";
+import TemplateSidebar from "../components/TemplateSidebar";
+import { useTemplateEditor } from "../hooks/useTemplateEditor";
+import { SECRET_CARD_CONFIG } from "../lib/templates";
 
-export default function ValentineTemplate3() {
+export default function SecretCardTemplate() {
+  const { 
+    data, 
+    updateField, 
+    isViewMode, 
+    isSidebarOpen, 
+    setIsSidebarOpen, 
+    publish 
+  } = useTemplateEditor(SECRET_CARD_CONFIG);
+
   return (
-    <div className="min-h-screen bg-background-dark flex flex-col font-body items-center justify-center overflow-hidden">
-      <Navbar />
+    <div className="min-h-screen bg-background-dark flex flex-col font-body items-center justify-center overflow-hidden relative">
+      {!isViewMode && <Navbar />}
+
+      {/* Sidebar for editing */}
+      {!isViewMode && (
+        <TemplateSidebar 
+          isOpen={isSidebarOpen} 
+          onClose={() => setIsSidebarOpen(false)}
+          config={SECRET_CARD_CONFIG}
+          data={data}
+          onUpdate={updateField}
+          onPublish={publish}
+        />
+      )}
+
+      {/* Floating Edit Button */}
+      {!isViewMode && !isSidebarOpen && (
+        <button 
+          onClick={() => setIsSidebarOpen(true)}
+          className="fixed bottom-6 right-6 z-50 bg-primary text-white p-4 rounded-full shadow-lg hover:bg-primary/90 transition-all hover:scale-105"
+        >
+          <Heart fill="currentColor" />
+        </button>
+      )}
       
-      <div className="valentines-day-card relative">
+      <div className={`valentines-day-card relative transition-all duration-300 ${!isViewMode && isSidebarOpen ? 'ml-[0] md:ml-[400px]' : ''}`}>
         <input id="open" type="checkbox" className="hidden peer" />
         <label htmlFor="open" className="open" title="Click to Open/Close"></label>
         
         {/* Card Front */}
         <div className="card-front">
-          <div className="note-text text-primary text-xl font-display font-bold">Click to Open</div>
+          <div className="white-note">
+            <div className="heart-seal"></div>
+            <div className="note-text-container font-display">
+              <span className="block">{data.cover_text}</span>
+            </div>
+          </div>
         </div>
         
         {/* Card Inside */}
         <div className="card-inside">
           <div className="text-one font-display">
-            <span className="block text-primary text-2xl mb-1">Happy</span>
-            <span className="block text-gray-800 text-xl">Valentine's</span>
-            <span className="block text-gray-800 text-xl">Day!</span>
+            <span className="block text-primary text-2xl mb-1">{data.line1}</span>
+            <span className="block text-gray-800 text-xl">{data.line2}</span>
+            <span className="block text-gray-800 text-xl">{data.line3}</span>
           </div>
           <div className="heart"></div>
           <div className="smile"></div>
@@ -51,7 +91,7 @@ export default function ValentineTemplate3() {
 
         .card-front {
           position: absolute;
-          background-color: #fff0f3;
+          background-color: var(--color-primary);
           width: 100%;
           height: 100%;
           transform-origin: left;
@@ -61,25 +101,55 @@ export default function ValentineTemplate3() {
           align-items: center;
           justify-content: center;
           z-index: 5;
+          overflow: hidden; /* Ensure content doesn't spill out visibly if not meant to */
         }
 
-        .card-front:before {
-          content: "";
-          position: absolute;
-          width: 280px;
-          height: 280px;
-          background-color: var(--color-primary); /* Adapted to theme */
-          top: 10px;
-          left: 10px;
-        }
-
-        .note-text {
+        /* Note styling */
+        .white-note {
           position: relative;
+          background-color: #fff0f3;
+          width: 80%;
+          height: 65%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+          /* Slight styling to look like paper */
+        }
+
+        /* Heart Seal */
+        .heart-seal {
+          position: absolute;
+          background-color: #c41e3a; /* Slightly darker red for contrast/depth */
+          height: 50px;
+          width: 50px;
+          top: -25px; /* Half overlapping top edge */
+          left: 50%;
+          transform: translateX(-50%) rotate(-45deg);
+          animation: none; /* No beat for the seal */
+          box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .heart-seal:before, .heart-seal:after {
+          content: "";
+          background-color: #c41e3a;
+          border-radius: 50%;
+          height: 50px;
+          width: 50px;
+          position: absolute;
+        }
+        
+        .heart-seal:before { top: -25px; left: 0; }
+        .heart-seal:after { left: 25px; top: 0; }
+
+        /* Text styling */
+        .note-text-container {
+          text-align: center;
           z-index: 6;
-          background: #fff0f3;
-          padding: 10px 20px;
-          border-radius: 5px;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+          color: #333;
+          font-weight: 700;
+          font-size: 2rem;
+          line-height: 1.1;
         }
 
         .card-inside {
@@ -97,12 +167,6 @@ export default function ValentineTemplate3() {
         input#open:checked ~ .card-front {
           transform: rotateY(-155deg);
           box-shadow: inset 100px 20px 100px rgba(0,0,0,.13), 30px 0 50px rgba(0,0,0,0.1);
-        }
-
-        input#open:checked ~ .card-front:before {
-          z-index: 5;
-          background-color: #fff0f3;
-          box-shadow: inset 100px 20px 100px rgba(0,0,0,.1), 30px 0 50px rgba(0,0,0,0.1);
         }
 
         /* Inside Content */
