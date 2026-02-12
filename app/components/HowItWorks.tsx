@@ -29,7 +29,7 @@ export default function HowItWorks() {
         <StepCard
           Icon={Pencil}
           title="2. Customize"
-          description="Add your favorite photos, write a personal message, and pick a song."
+          description="Write a loving note that will make them smile."
         />
         <StepCard
           Icon={Send}

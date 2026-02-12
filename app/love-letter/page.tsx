@@ -14,14 +14,18 @@ function LoveLetterContent() {
     isViewMode, 
     isSidebarOpen, 
     setIsSidebarOpen, 
-    publish 
+    publish,
+    isLoading,
+    isPublishing,
+    isShareModalOpen,
+    setIsShareModalOpen,
+    publishedUrl
   } = useTemplateEditor(LOVE_LETTER_CONFIG);
 
   const [isOpen, setIsOpen] = useState(false);
   const [hearts, setHearts] = useState<{ id: number; left: string; delay: string; size: number }[]>([]);
 
   useEffect(() => {
-    
     const newHearts = Array.from({ length: 20 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
@@ -30,6 +34,10 @@ function LoveLetterContent() {
     }));
     setHearts(newHearts);
   }, []);
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading your message...</div>;
+  }
 
   // Toggle open/closed state
   const toggleEnvelope = () => {
@@ -49,6 +57,10 @@ function LoveLetterContent() {
           data={data}
           onUpdate={updateField}
           onPublish={publish}
+          isPublishing={isPublishing}
+          isShareModalOpen={isShareModalOpen}
+          onCloseShareModal={() => setIsShareModalOpen(false)}
+          publishedUrl={publishedUrl}
         />
       )}
 

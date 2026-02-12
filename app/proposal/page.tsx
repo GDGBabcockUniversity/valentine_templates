@@ -14,7 +14,12 @@ function ProposalContent() {
     isViewMode, 
     isSidebarOpen, 
     setIsSidebarOpen, 
-    publish 
+    publish,
+    isLoading,
+    isPublishing,
+    isShareModalOpen,
+    setIsShareModalOpen,
+    publishedUrl
   } = useTemplateEditor(PROPOSAL_CONFIG);
 
   const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
@@ -32,6 +37,10 @@ function ProposalContent() {
     }));
     setHearts(newHearts);
   }, []);
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading your proposal...</div>;
+  }
 
   const moveNoButton = () => {
     const x = Math.random() * 200 - 100;
@@ -58,6 +67,10 @@ function ProposalContent() {
           data={data}
           onUpdate={updateField}
           onPublish={publish}
+          isPublishing={isPublishing}
+          isShareModalOpen={isShareModalOpen}
+          onCloseShareModal={() => setIsShareModalOpen(false)}
+          publishedUrl={publishedUrl}
         />
       )}
       

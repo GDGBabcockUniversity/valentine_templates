@@ -14,7 +14,12 @@ function OurStoryContent() {
     isViewMode, 
     isSidebarOpen, 
     setIsSidebarOpen, 
-    publish 
+    publish,
+    isLoading,
+    isPublishing,
+    isShareModalOpen,
+    setIsShareModalOpen,
+    publishedUrl
   } = useTemplateEditor(OUR_STORY_CONFIG);
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -61,6 +66,10 @@ function OurStoryContent() {
     }
   };
 
+  if (isLoading) {
+    return <div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading our story...</div>;
+  }
+
   const currentData = storySteps[currentStep];
   const isFinalStep = currentData.id === 'final';
 
@@ -77,6 +86,10 @@ function OurStoryContent() {
           data={data}
           onUpdate={updateField}
           onPublish={publish}
+          isPublishing={isPublishing}
+          isShareModalOpen={isShareModalOpen}
+          onCloseShareModal={() => setIsShareModalOpen(false)}
+          publishedUrl={publishedUrl}
         />
       )}
 

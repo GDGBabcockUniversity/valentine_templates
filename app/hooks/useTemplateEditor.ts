@@ -3,13 +3,23 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { TemplateConfig } from "../lib/templates";
+import { supabase } from "../lib/supabase";
+
+const generateShortId = () => {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+};
 
 export function useTemplateEditor(config: TemplateConfig) {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-
-  const isViewMode = config.fields.some(field => searchParams.has(field.key));
+  const templateId = searchParams.get("id");
+  const isViewMode = !!templateId;
 
   const [data, setData] = useState<Record<string, string>>(() => {
     const initialState: Record<string, string> = {};
@@ -20,32 +30,47 @@ export function useTemplateEditor(config: TemplateConfig) {
   });
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(isViewMode);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [publishedUrl, setPublishedUrl] = useState("");
 
-
+  // Load from Supabase if id is present
   useEffect(() => {
-    if (isViewMode) {
-      const newData: Record<string, string> = {};
-      config.fields.forEach(field => {
-        const paramValue = searchParams.get(field.key);
-        newData[field.key] = paramValue || field.defaultValue;
-      });
-      setData(newData);
-      setIsSidebarOpen(false); 
-    } else {
-      // Load from LocalStorage
-      const saved = localStorage.getItem(`template-${config.id}`);
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          setData(prev => ({ ...prev, ...parsed }));
-        } catch (e) {
-          console.error("Failed to parse saved template data", e);
+    async function loadTemplate() {
+      if (templateId) {
+        setIsLoading(true);
+        const { data: record, error } = await supabase
+          .from("templates")
+          .select("data")
+          .eq("id", templateId)
+          .single();
+
+        if (error) {
+          console.error("Error loading template:", error);
+        } else if (record) {
+          setData(record.data);
+          setIsSidebarOpen(false);
+        }
+        setIsLoading(false);
+      } else {
+        // Load from LocalStorage for editing
+        const saved = localStorage.getItem(`template-${config.id}`);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            setData(prev => ({ ...prev, ...parsed }));
+          } catch (e) {
+            console.error("Failed to parse saved template data", e);
+          }
         }
       }
     }
-  }, [isViewMode, searchParams, config.id, config.fields]);
 
-  // Save to LocalStorage
+    loadTemplate();
+  }, [templateId, config.id]);
+
+  // Save to LocalStorage for persistence during editing
   useEffect(() => {
     if (!isViewMode) {
       localStorage.setItem(`template-${config.id}`, JSON.stringify(data));
@@ -56,16 +81,30 @@ export function useTemplateEditor(config: TemplateConfig) {
     setData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const publish = () => {
-    const params = new URLSearchParams();
-    
-    // Add all fields to params
-    Object.entries(data).forEach(([key, value]) => {
-      params.set(key, value);
-    });
-    
-    const url = `${window.location.pathname}?${params.toString()}`;
-    router.push(url);
+  const publish = async () => {
+    const shortId = generateShortId();
+    setIsPublishing(true);
+    const { error } = await supabase
+      .from("templates")
+      .insert([
+        { 
+          id: shortId,
+          template_type: config.id, 
+          data: data 
+        }
+      ]);
+
+    setIsPublishing(false);
+
+    if (error) {
+      console.error("Error publishing template:", error);
+      alert("Failed to publish. Check console for details.");
+      return;
+    }
+
+    const url = `${window.location.origin}${window.location.pathname}?id=${shortId}`;
+    setPublishedUrl(url);
+    setIsShareModalOpen(true);
   };
 
   return {
@@ -74,6 +113,11 @@ export function useTemplateEditor(config: TemplateConfig) {
     isViewMode,
     isSidebarOpen,
     setIsSidebarOpen,
-    publish
+    publish,
+    isLoading,
+    isPublishing,
+    isShareModalOpen,
+    setIsShareModalOpen,
+    publishedUrl
   };
 }

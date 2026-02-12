@@ -14,8 +14,17 @@ function SecretCardContent() {
     isViewMode, 
     isSidebarOpen, 
     setIsSidebarOpen, 
-    publish 
+    publish,
+    isLoading,
+    isPublishing,
+    isShareModalOpen,
+    setIsShareModalOpen,
+    publishedUrl
   } = useTemplateEditor(SECRET_CARD_CONFIG);
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-background-dark flex items-center justify-center text-white">Loading your secret card...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-background-dark flex flex-col font-body items-center justify-center overflow-hidden relative">
@@ -30,6 +39,10 @@ function SecretCardContent() {
           data={data}
           onUpdate={updateField}
           onPublish={publish}
+          isPublishing={isPublishing}
+          isShareModalOpen={isShareModalOpen}
+          onCloseShareModal={() => setIsShareModalOpen(false)}
+          publishedUrl={publishedUrl}
         />
       )}
 
